@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Canvas Test</title>
+
+
+    <canvas id="myCanvas" width=window.innerWidth height=window.innerHeight
+            style="border:1px solid #d3d3d3; z-index: 0;">Your browser does not support the HTML5 canvas tag.</canvas>
+
+
+    <script>
+
+        /* Initialization of Variables */
+        var c = document.getElementById("myCanvas");
+        var ctx = c.getContext("2d");
+
+        var rectPosX = 600;
+        var rectPosY = 600;
+
+        var mousePosX;
+        var mousePosY;
+
+        var message;
+
+        function drawCanvas()
+        {
+            ctx.canvas.width = window.innerWidth;
+            ctx.canvas.height = window.innerHeight;
+
+            message = 'Rect position: ' + rectPosX + ',' + rectPosY;
+            writeMessage(c, message);
+
+            ctx.beginPath();
+            ctx.rect(rectPosX, rectPosY, 150, 150);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        function getMousePos(c, evt) {
+            var rect = c.getBoundingClientRect();
+            mousePosX = evt.clientX - rect.left;
+            mousePosY = evt.clientY - rect.top;
+            rectPosX = evt.clientX - rect.left;
+            rectPosY = evt.clientY - rect.top;
+            return {
+                x: mousePosX,
+                y: mousePosY
+            };
+        }
+
+        function writeMessage(c, message) {
+            ctx.beginPath();
+            ctx.clearRect(0, 0, c.width, c.height);
+            ctx.font = '18pt Calibri';
+            ctx.fillStyle = 'black';
+            ctx.fillText(message, 10, 25);
+            ctx.closePath();
+        }
+
+        function moveRect(a, b)
+        {
+            ctx.beginPath();
+            ctx.rect(a, b, 150, 150);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        window.addEventListener('mousemove', function(evt){
+            var mousePos = getMousePos(c, evt);
+            message = 'Rect position: ' + mousePos.x + ',' + mousePos.y;
+            writeMessage(c, message);
+            moveRect(mousePos.x, mousePos.y);
+        }, true);
+
+
+        window.addEventListener('resize', function(e){
+            drawCanvas();
+        }, true);
+
+        window.addEventListener('keypress', function(e){
+            if ( e.keyCode == 119 ) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                message = 'Rect position: ' + rectPosX + ',' + (rectPosY - 10);
+                writeMessage(c, message);
+                moveRect(rectPosX, rectPosY -= 10);
+            }
+
+            if ( e.keyCode == 115 ) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                message = 'Rect position: ' + rectPosX + ',' + (rectPosY + 10);
+                writeMessage(c, message);
+                moveRect(rectPosX, rectPosY += 10);
+            }
+
+            if ( e.keyCode == 97 ) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                message = 'Rect position: ' + (rectPosX - 10) + ',' + rectPosY;
+                writeMessage(c, message);
+                moveRect(rectPosX -= 10, rectPosY);
+            }
+
+            if ( e.keyCode == 100 ) {
+                ctx.clearRect(0, 0, c.width, c.height);
+                message = 'Rect position: ' + (rectPosX + 10) + ',' + rectPosY;
+                writeMessage(c, message);
+                moveRect(rectPosX += 10, rectPosY);
+            }
+        }, false);
+
+
+        drawCanvas();
+
+    </script>
+
+
+</head>
+<body>
+
+</body>
+</html>
